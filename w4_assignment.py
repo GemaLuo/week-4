@@ -20,7 +20,7 @@ def index():
 #登入：使用POST方法
 @app.route("/signin", methods=["POST"])
 def signin():
-    if request.form["password"]==user.get(request.form["username"]): #若密碼test等於帳號test
+    if request.form["password"]==request.form["username"]: #若密碼test等於帳號test
         session["save"]=request.form["username"]
         return redirect ("http://127.0.0.1:3000/member")
     elif request.form["username"]=="" or request.form["username"]==None:
@@ -39,9 +39,9 @@ def signin():
 def member():
     if session["save"] in user: #驗證成功，進入會員頁
         return render_template("member.html")
-    elif session["save"] not in user: #成功頁面網址
+    elif session["save"] not in user:
         return redirect ("http://127.0.0.1:3000/")
-    elif session["save"]== "": #未登入狀態
+    elif session["save"]== "": 
         return redirect("http://127.0.0.1:3000/")
     elif session["save"]== None: 
         return redirect("http://127.0.0.1:3000/")
