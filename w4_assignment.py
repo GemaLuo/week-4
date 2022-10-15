@@ -10,7 +10,6 @@ app=Flask(
 )
 
 app.secret_key="test"
-user={"test":"test"}
 
 #首頁
 @app.route("/")
@@ -20,38 +19,29 @@ def index():
 #登入：使用POST方法
 @app.route("/signin", methods=["POST"])
 def signin():
-    if request.form["password"]==request.form["username"]:
-        session["save"]=request.form["username"]
+    if request.form["username"]=="test" and request.form["password"]=="test":
+        session["user"]=request.form["username"] #使用者登入狀態
         return redirect ("http://127.0.0.1:3000/member")
-    elif request.form["username"]=="" or request.form["username"]==None:
-        session["save"]=None
-        return redirect ("http://127.0.0.1:3000/error?message=nothing")
-    elif request.form["password"]=="" or request.form["password"]==None:
-        session["save"]=None
+    elif request.form["username"]=="" or request.form["password"]=="":
         return redirect ("http://127.0.0.1:3000/error?message=nothing")
     else:
-        session["save"]=None
         return redirect ("http://127.0.0.1:3000/error?message=wrong")
 
 #成功進入會員頁
 #未登入時導向首頁
-@app.route("/member")
+@app.route("/member") #不需要檢查帳密！僅確認登入狀態！
 def member():
-    if session["save"] in user: #驗證成功，進入會員頁
+    if "user" in session: #驗證成功，進入會員頁
         return render_template("member.html")
-    elif session["save"] not in user:
-        return redirect ("http://127.0.0.1:3000/")
-    elif session["save"]== "":
-        return redirect("http://127.0.0.1:3000/")
-    elif session["save"]== None: 
-        return redirect("http://127.0.0.1:3000/")
     else:
-        return redirect("http://127.0.0.1.3000/")
+        return redirect("/")
+
 
 #登出會員頁面，回到首頁
+#登出時刪除紀錄
 @app.route("/signout")
 def signout():
-    session["save"]= None
+    session.pop("user", None) #刪除session
     return redirect("http://127.0.0.1:3000/")
 
 #失敗頁面
