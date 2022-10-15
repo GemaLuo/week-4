@@ -19,7 +19,7 @@ def index():
 #登入：使用POST方法
 @app.route("/signin", methods=["POST"])
 def signin():
-    if request.form["username"]=="test" and request.form["password"]=="test":
+    if request.form["username"]=="test" and request.form["password"]=="test": #確認帳密是否為test，而非是否有相等！
         session["user"]=request.form["username"] #使用者登入狀態
         return redirect ("http://127.0.0.1:3000/member")
     elif request.form["username"]=="" or request.form["password"]=="":
